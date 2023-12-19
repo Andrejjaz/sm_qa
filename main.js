@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 var data = {};
 
 
@@ -420,5 +419,3 @@ jQuery('.schedule').on('click', '.shift-toggler', e => {
 // ******************
 // TOGGLER BUTTON END
 // ******************
-=======
->>>>>>> ee4fa372300f8c5e4391e3077e3ed2b6ecd7291e
