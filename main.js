@@ -28,7 +28,6 @@ let ExcelToJSON = function (variant) {
                     window.data.scheduleObj = filtered;
                 } else if (variant === 'answers') {
                     filtered = JSON.parse(json_object).filter((obj) => {
-                        // return obj['Reply Status'] === 'Yes' && obj['Replied By'] === 'Customer Support';
                         return (
                             (obj['Task Assignee'] !== 'Den Kislinskiy' && obj['Replied By'] !== 'Den Kislinskiy') || obj['Task Assignee'] !== 'Den Kislinskiy' || obj['Replied By'] !== 'Den Kislinskiy'
                         );
@@ -237,15 +236,33 @@ function showSelectedSchedule(selectedEmployee) {
             const time = Number(completedArray[1]?.split(':')[0]);
 
             if (date && time) {
-                if (scheduleDate === date && (selectedEmployee[item].indexOf('Morning') !== -1 || selectedEmployee[item].indexOf('08:00 - 16:00') !== -1) && time >= 8 && time < 16) {
+                if (
+                    scheduleDate === date &&
+                    elem['Reply Status'] === 'Yes' &&
+                    (selectedEmployee[item].indexOf('Morning') !== -1 || selectedEmployee[item].indexOf('08:00 - 16:00') !== -1) &&
+                    time >= 8 &&
+                    time < 16
+                ) {
                     return elem;
                 }
 
-                if (scheduleDate === date && (selectedEmployee[item].indexOf('Night') !== -1 || selectedEmployee[item].indexOf('00:00 - 08:00') !== -1) && time >= 0 && time < 8) {
+                if (
+                    scheduleDate === date &&
+                    elem['Reply Status'] === 'Yes' &&
+                    (selectedEmployee[item].indexOf('Night') !== -1 || selectedEmployee[item].indexOf('00:00 - 08:00') !== -1) &&
+                    time >= 0 &&
+                    time < 8
+                ) {
                     return elem;
                 }
 
-                if (scheduleDate === date && (selectedEmployee[item].indexOf('Evening') !== -1 || selectedEmployee[item].indexOf('16:00 - 08:00') !== -1) && time >= 16 && time < 24) {
+                if (
+                    scheduleDate === date &&
+                    elem['Reply Status'] === 'Yes' &&
+                    (selectedEmployee[item].indexOf('Evening') !== -1 || selectedEmployee[item].indexOf('16:00 - 08:00') !== -1) &&
+                    time >= 16 &&
+                    time < 24
+                ) {
                     return elem;
                 }
             }
