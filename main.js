@@ -28,6 +28,7 @@ let ExcelToJSON = function (variant) {
                     window.data.scheduleObj = filtered;
                 } else if (variant === 'answers') {
                     filtered = JSON.parse(json_object).filter((obj) => {
+                        // return obj['Reply Status'] === 'Yes' && obj['Replied By'] === 'Customer Support';
                         return (
                             (obj['Task Assignee'] !== 'Den Kislinskiy' && obj['Replied By'] !== 'Den Kislinskiy') || obj['Task Assignee'] !== 'Den Kislinskiy' || obj['Replied By'] !== 'Den Kislinskiy'
                         );
@@ -236,33 +237,15 @@ function showSelectedSchedule(selectedEmployee) {
             const time = Number(completedArray[1]?.split(':')[0]);
 
             if (date && time) {
-                if (
-                    scheduleDate === date &&
-                    elem['Reply Status'] === 'Yes' &&
-                    (selectedEmployee[item].indexOf('Morning') !== -1 || selectedEmployee[item].indexOf('08:00 - 16:00') !== -1) &&
-                    time >= 8 &&
-                    time < 16
-                ) {
+                if (scheduleDate === date && (selectedEmployee[item].indexOf('Morning') !== -1 || selectedEmployee[item].indexOf('08:00 - 16:00') !== -1) && time >= 8 && time < 16) {
                     return elem;
                 }
 
-                if (
-                    scheduleDate === date &&
-                    elem['Reply Status'] === 'Yes' &&
-                    (selectedEmployee[item].indexOf('Night') !== -1 || selectedEmployee[item].indexOf('00:00 - 08:00') !== -1) &&
-                    time >= 0 &&
-                    time < 8
-                ) {
+                if (scheduleDate === date && (selectedEmployee[item].indexOf('Night') !== -1 || selectedEmployee[item].indexOf('00:00 - 08:00') !== -1) && time >= 0 && time < 8) {
                     return elem;
                 }
 
-                if (
-                    scheduleDate === date &&
-                    elem['Reply Status'] === 'Yes' &&
-                    (selectedEmployee[item].indexOf('Evening') !== -1 || selectedEmployee[item].indexOf('16:00 - 08:00') !== -1) &&
-                    time >= 16 &&
-                    time < 24
-                ) {
+                if (scheduleDate === date && (selectedEmployee[item].indexOf('Evening') !== -1 || selectedEmployee[item].indexOf('16:00 - 08:00') !== -1) && time >= 16 && time < 24) {
                     return elem;
                 }
             }
@@ -273,7 +256,7 @@ function showSelectedSchedule(selectedEmployee) {
 
         let oneShiftAnswers = [];
 
-        console.log(employeesAnswersShift, 'employeesAnswersShift');
+        // console.log(employeesAnswersShift, 'employeesAnswersShift');
 
         employeesAnswersShift.forEach((item, indexAnswer) => {
             const tweet = document.createElement('p');
@@ -333,6 +316,8 @@ function showSelectedSchedule(selectedEmployee) {
     // самый длинный ответ (с ссылкой в идеале)
     // самый быстрый ответ
 
+    console.log(averageMonthArr);
+
     averageMonthTime = Math.floor(averageMonthArr.reduce((a, b) => a + b, 0) / averageMonthArr.length);
     slowestMonthAnswerId = averageMonthArr.indexOf(Math.max(...averageMonthArr));
     fastestMonthAnswerId = averageMonthArr.indexOf(Math.min(...averageMonthArr));
@@ -376,10 +361,10 @@ function showSelectedSchedule(selectedEmployee) {
         const completed = document.createElement('span');
         completed.append(completedTimeStamp);
         const submitted = document.createElement('span');
-        submitted.append(tweet['Timestamp (PT)']);
+        submitted.append(tweet['Timestamp (EET)']);
 
         const timeStamps = document.createElement('p');
-        timeStamps.append(tweet['Timestamp (PT)'] + ' - ' + completedTimeStamp);
+        timeStamps.append(tweet['Timestamp (EET)'] + ' - ' + completedTimeStamp);
 
         const family = document.createElement('span');
         family.classList.add('family');
@@ -397,8 +382,11 @@ function showSelectedSchedule(selectedEmployee) {
             family.setAttribute('title', 'Namecheap');
         }
 
-        const submittedTime = new Date(tweet['Timestamp (PT)']);
+        const submittedTime = new Date(tweet['Timestamp (EET)']);
         const completedTime = new Date(completedTimeStamp);
+
+        console.log(submittedTime);
+        console.log(completedTime);
         const diff = Math.abs(completedTime - submittedTime);
 
         const minutes = Math.floor(diff / 1000 / 60);
@@ -503,3 +491,11 @@ jQuery('.schedule').on('click', '.shift-toggler', (e) => {
 // ******************
 // TOGGLER BUTTON END
 // ******************
+
+
+
+$(document).on("blur", "textarea", function (e) {
+    var height = $(this).css("height");
+    var iScrollHeight = $(this).prop("scrollHeight");
+    $(this).css('height',iScrollHeight);
+});
