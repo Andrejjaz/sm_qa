@@ -27,7 +27,10 @@ let ExcelToJSON = function (variant) {
 
                     window.data.scheduleObj = filtered;
                 } else if (variant === 'answers') {
-                    filtered = JSON.parse(json_object).filter((obj) => {
+                    let replied = JSON.parse(json_object).filter((obj) => {
+                        return obj['Reply Status'] === 'Yes';
+                    })
+                    filtered = replied.filter((obj) => {
                         // return obj['Reply Status'] === 'Yes' && obj['Replied By'] === 'Customer Support';
                         return (
                             (obj['Task Assignee'] !== 'Den Kislinskiy' && obj['Replied By'] !== 'Den Kislinskiy') || obj['Task Assignee'] !== 'Den Kislinskiy' || obj['Replied By'] !== 'Den Kislinskiy'
